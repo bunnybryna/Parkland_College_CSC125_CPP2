@@ -1,0 +1,37 @@
+02/07
+2515750
+
+http://www.csit.parkland.edu/~bzhao1/cgi-bin/csc125/
+
+02/09
+to run the file:
+ g++ hello.cpp -o runme
+
+or g++ hello.cpp
+=> a.out
+
+add this line 
+ cout << "Content-Type: text/html\n\n";
+into .cgi file so that you can see it on webpage
+
+hello.cpp:6:39: error: expected ';' before 'l'
+file hello.cpp, line 6, colume 39 has errors
+
+0214
+never #include cpp file
+<> means from system directory. "" means from current directory
+
+g++ main.cpp date.cpp -o runme
+g++ *opp -o runme
+
+#ifndef _DATE_H_
+#define _DATE_H_
+
+0216
+URL encoded
+GET form information is placed in the URL (at the end)
+POST form information is sent in the HTTP body
+
+<form action='handleBasicForm.cgi' method='POST'> if you add method='POST', the form will be ent to the HTTP body and
+will not be printed on the screen
+

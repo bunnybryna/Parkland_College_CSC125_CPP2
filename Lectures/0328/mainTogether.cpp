@@ -28,7 +28,17 @@ public:
     void push_back(string str);
     void pop_front();
     void clear();
+    int count() {return countRecursiveHelper(m_Head);}
+    void print(){printRecursiveHelper(m_Head);}
+    void printBackwards(){printBackwardsRecursiveHelper(m_Head);}
+    void mergeSort();
+    string front(){return m_Head->getData();}
 private:
+    int countRecursiveHelper(LinkedListNode* ptr);
+    void printRecursiveHelper(LinkedListNode* ptr);
+    void printBackwardsRecursiveHelper(LinkedListNode* ptr);
+    void split(LinkedList &l1,LinkedList &l2);
+    void merge(LinkedList &l1,LinkedList &l2);
     LinkedListNode* m_Head;
     LinkedListNode* m_Tail;
 };
@@ -55,7 +65,20 @@ int main()
     ll.pop_front();
     ll.pop_front();
     cout << "Here's ll after popping 3 items: " << ll << endl;
-    cout << "Hello World!" << endl;
+    cout << ll.count() << " elements in the list" << endl;
+    ll.print();
+    ll.printBackwards();
+    cout << endl<<"---------------------------"<<"Hello World!" << "---------------------------" <<endl;
+    ll.push_front("one");
+    ll.push_front("two");
+    ll.push_front("three");
+    ll.push_front("end4");
+    ll.push_front("end5");
+    ll.push_front("end6");
+    ll.print();
+    ll.mergeSort();
+    cout << endl << "---------sorted---------" << endl;
+    ll.print();
     return 0;
 }
 
@@ -160,5 +183,89 @@ void LinkedList::clear()
     while (!empty())
     {
         pop_front();
+    }
+}
+
+int LinkedList::countRecursiveHelper(LinkedListNode* ptr)
+{
+    if (ptr == NULL)
+    {
+        return 0;
+    }
+    return 1 + countRecursiveHelper(ptr->getNext());
+}
+
+void LinkedList::printRecursiveHelper(LinkedListNode* ptr)
+{
+    if (ptr == NULL)
+    {
+        return;
+    }
+    cout << ptr->getData() << " ";
+    printRecursiveHelper(ptr->getNext());
+}
+
+void LinkedList::printBackwardsRecursiveHelper(LinkedListNode* ptr)
+{
+    if (ptr == NULL)
+    {
+        return;
+    }
+    printBackwardsRecursiveHelper(ptr->getNext());
+    cout << ptr->getData() << " ";
+}
+
+void LinkedList::mergeSort()
+{
+    // 0 or 1 element
+    if (m_Head == m_Tail)
+    {
+        return;
+    }
+    LinkedList l1,l2;
+    split(l1,l2);
+    l1.mergeSort();
+    l2.mergeSort();
+    merge(l1,l2);
+}
+
+void LinkedList::split(LinkedList &l1,LinkedList &l2)
+{
+    while(!empty())
+    {
+        l1.push_back(front());
+        pop_front();
+        if (!empty())
+        {
+            l2.push_back(front());
+            pop_front();
+        }
+    }
+}
+
+void LinkedList::merge(LinkedList &l1,LinkedList &l2)
+{
+    while(!l1.empty() && !l2.empty())
+    {
+        if (l1.front() < l2.front())
+        {
+            push_back(l1.front());
+            l1.pop_front();
+        }
+        else
+        {
+            push_back(l2.front());
+            l2.pop_front();
+        }
+    }
+    while (!l1.empty())
+    {
+        push_back(l1.front());
+        l1.pop_front();
+    }
+    while (!l2.empty())
+    {
+        push_back(l2.front());
+        l2.pop_front();
     }
 }

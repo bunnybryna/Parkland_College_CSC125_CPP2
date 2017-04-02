@@ -563,6 +563,7 @@ namespace queuesavitch
         Queue();
         Queue(const Queue &aQueue);
         ~Queue();
+        void add(char item);      
         char remove();
         bool empty() const;
       private:
@@ -625,6 +626,8 @@ namespace queuesavitch
         }
         else
         {
+            // create the first node pointing both front and back to it
+            // temp_ptr_old is the pointer iterating through the whole aQueue
             QueueNodePtr temp_ptr_old = aQueue.front;
             QueueNodePtr temp_ptr_new;
             back = new QueueNode;
@@ -634,10 +637,14 @@ namespace queuesavitch
             temp_ptr_old = temp_ptr_old->link;
             while(temp_ptr_old != NULL)
             {
+                // create the followed ones
+                // temp_ptr_new iterating the new queue
                 temp_ptr_new = new QueueNode;
                 temp_ptr_new->data = temp_ptr_old->data;
                 temp_ptr_new->link = NULL;
+                // make the 1 pointing to the newly-created 2
                 back->link = temp_ptr_new;
+                // then point back to 2
                 back = temp_ptr_new;
                 temp_ptr_old = temp_ptr_old->link;
             }
@@ -671,8 +678,9 @@ namespace queuesavitch
             temp_ptr = new QueueNode;
             temp_ptr->data = item;
             temp_ptr->link = NULL;
+            // adding at the end/back
             back->link = temp_ptr;
-            bakc = temp_ptr;
+            back = temp_ptr;
         }
     }
     char Queue::remove()
@@ -682,14 +690,164 @@ namespace queuesavitch
             cout << "Error: Removing an item from an empty queue.\n";
             exit(1);
         }
+        // FIFO, take out the front one
         char result = front->data;
         QueueNodePtr discard;
         discard = front;
         front = front->link;
         if(front == NULL)
-            back = NUL;;
+            back = NULL;;
+        delete discard;
+        return result;
+    }   
+}
+
+//mainTogether
+#include <iostream>
+#include <cstdlib>
+#include <cstddef>
+namespace queuesavitch
+{
+    struct QueueNode
+    {
+        char data;
+        QueueNode* link;
+    };
+    typedef QueueNode* QueueNodePtr;
+    class Queue
+    {
+      public:
+        Queue();
+        Queue(const Queue &aQueue);
+        ~Queue();
+        void add(char item);
+        char remove();
+        bool empty() const;
+      private:
+        QueueNodePtr front;
+        QueueNodePtr back;
+    };
+
+}
+
+using namespace std;
+using namespace queuesavitch;
+
+int main()
+{
+    Queue q;
+    char next, ans;
+
+    do
+    {
+        cout << "Enter a word: ";
+        cin.get(next);
+        while(next != '\n')
+        {
+            q.add(next);
+            cin.get(next);
+        }
+        cout << "You entered : ";
+        while (! q.empty())
+            cout <<q.remove();
+        cout << endl;
+        cout << "Again?(y/n)";
+        cin >> ans;
+        cin.ignore(10000,'\n');
+
+    }while (ans != 'n' && ans != 'N');
+    return 0;
+}
+
+using namespace std;
+namespace queuesavitch
+{
+    Queue::Queue() :front(NULL), back(NULL)
+    {
+
+    }
+    Queue::Queue(const Queue &aQueue)
+    {
+        if(aQueue.empty())
+        {
+            front=back=NULL;
+        }
+        else
+        {
+            // create the first node pointing both front and back to it
+            // temp_ptr_old is the pointer iterating through the whole aQueue
+            QueueNodePtr temp_ptr_old = aQueue.front;
+            QueueNodePtr temp_ptr_new;
+            back = new QueueNode;
+            back->data = temp_ptr_old->data;
+            back->link = NULL;
+            front = back;
+            temp_ptr_old = temp_ptr_old->link;
+            while(temp_ptr_old != NULL)
+            {
+                // create the followed ones
+                // temp_ptr_new iterating the new queue
+                temp_ptr_new = new QueueNode;
+                temp_ptr_new->data = temp_ptr_old->data;
+                temp_ptr_new->link = NULL;
+                // make the 1 pointing to the newly-created 2
+                back->link = temp_ptr_new;
+                // then point back to 2
+                back = temp_ptr_new;
+                temp_ptr_old = temp_ptr_old->link;
+            }
+        }
+    }
+    Queue::~Queue()
+    {
+        char next;
+        while(!empty())
+        {
+            next = remove();
+        }
+    }
+    bool Queue::empty() const
+    {
+        //front == NULL also works
+        return (back==NULL);
+    }
+
+    void Queue::add(char item)
+    {
+        if(empty())
+        {
+            front = new QueueNode;
+            front->data = item;
+            front->link = NULL;
+            back = front;
+        }
+        else
+        {
+            QueueNodePtr temp_ptr;
+            temp_ptr = new QueueNode;
+            temp_ptr->data = item;
+            temp_ptr->link = NULL;
+            // adding at the end/back
+            back->link = temp_ptr;
+            back = temp_ptr;
+        }
+    }
+    char Queue::remove()
+    {
+        if(empty())
+        {
+            cout << "Error: Removing an item from an empty queue.\n";
+            exit(1);
+        }
+        // FIFO, take out the front one
+        char result = front->data;
+        QueueNodePtr discard;
+        discard = front;
+        front = front->link;
+        if(front == NULL)
+            back = NULL;;
         delete discard;
         return result;
     }
-    
+
 }
