@@ -1,0 +1,44 @@
+﻿<html>
+<head>
+
+</head>
+<body>
+
+<table>
+<tr>
+<td>
+<form method="POST" action="runme.cgi">
+Enter your program below (up/down scrolling is permitted, avoid left/right scrolling) <br/ >
+<textarea name="program" rows="20" cols="40" wrap="soft">
+</textarea> <br/ >
+<input type="submit"> <br/ >
+</form>
+</td>
+
+<td>
+<table>
+<tr>
+<th>Valid Commands:</th><th> What it does: </th>
+</tr>
+<tr>
+<td>PUSH <i>string</i></td><td>Adds <i>string</i> to the queue. Nothing needs to be displayed. The <i>string</i> is every this after the space after PUSH until the end of the line.</td>
+</tr>
+<tr>
+<td>SHOW</td><td>displays the contents of entire queue across the screen as a table with one row.  </td>
+</tr>
+<tr>
+<td>POP</td><td>removes the first element from the queue.  Nothing needs to be displayed. POPping from a empty queue will cause an error message and the program will shut down.</td>
+</tr>
+<tr>
+<td>FRONT</td><td>Displays the first element on the queue only.  Nothing in the queue changes. Calling FRONT on an empty queue will cause an error message and the program will shut down.</td>
+</tr>
+<tr>
+<td>NAME</td><td>Displays YOUR name. Nothing in the queue changes.</td>
+</tr>
+<tr><td colspan="2">Any other commands will display that an invalid command was entered, the command will be displayed and exit the program.
+</td></tr>
+
+</table>
+
+</body>
+</html>

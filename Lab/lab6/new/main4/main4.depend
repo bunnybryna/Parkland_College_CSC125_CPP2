@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1491944289 source:c:\users\bryna\documents\life in il\parkland\csc 125\lab\lab6\new\main4\linkedlist.cpp
+	"linkedlist.h"
+	<cstdlib>
+
+1491944266 c:\users\bryna\documents\life in il\parkland\csc 125\lab\lab6\new\main4\linkedlist.h
+	"linkedlistnode.h"
+	<iostream>
+
+1491944226 c:\users\bryna\documents\life in il\parkland\csc 125\lab\lab6\new\main4\linkedlistnode.h
+	<string>
+
+1491944223 source:c:\users\bryna\documents\life in il\parkland\csc 125\lab\lab6\new\main4\linkedlistnode.cpp
+	"linkedlistnode.h"
+
