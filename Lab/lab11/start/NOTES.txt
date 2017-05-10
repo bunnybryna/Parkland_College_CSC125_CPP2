@@ -1,0 +1,14 @@
+runme.cgi is a selfcontained webscript, just click on it in the browser.
+
+
+
+use 
+g++ -DDEBUG *cpp -o runme.cgi
+
+if you want the debugging displayed
+
+use 
+g++ *cpp -o runme.cgi
+
+if you don't want the debugging displayed
+
