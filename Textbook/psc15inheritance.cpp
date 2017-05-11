@@ -277,5 +277,302 @@ int main()
 	return 0;
 }
 
-
+// constructors, assign operators, and destructors are not inherited
+// if you don't define a copy constructor in a derived class, C++ will generate a default one
+// but it won't work correctly for classes with pointers
+Derived& Derived::operator=(const Derived& right_side)
+{
+	Base::operator=(right_side);
 }
+
+Derived::Derived(const Derived& object) : Base(obkect),<more initializations>
+
+// Polymorphism
+// 15.8 Interface for the Base Class Sale
+
+#ifndef SALE_H
+#define SALE_H
+#include <iostream>
+using namespace std;
+
+namespace salesavitch
+{
+	class Sale
+	{
+	public:
+		Sale();
+		Sale(double the_price);
+		virtual double bill() const;
+		double savings(const Sale& other) const;
+	protected:
+		double price;
+	};
+	
+	bool operator<(const Sale& first, const Sale& second);
+}
+#endif
+
+// 15.9 Implementation of the Base Class Sale
+#include "sale.h"
+namespace salesavitch
+{
+	Sale::Sale() : price(0)
+	{
+	}
+	Sale::Sale(double the_price) : price(the_price)
+	{
+	}
+	double Sale::bill() const
+	{
+		return price;
+	}
+	double Sale::savings(const Sale& other) const
+	{
+		return (bill() - other.bill());
+	}
+	bool operator<(const Sale& first, const Sale& second)
+	{
+		return(first.bill()<second.bill());
+	}
+}
+
+
+// 15.10 The Derived Class DiscountSale
+#ifndef DISCOUNTSALE_H
+#define DISCOUNTSALE_H
+#include "sale.h"
+
+namespace salesavitch
+{
+	class DiscountSale : public Sale
+	{
+	public:
+		DiscountSale();
+		DiscountSale(double the_price, double the_discount);
+		virtual double bill() const;
+	protected:
+		double discount;
+	};
+}
+#endif 
+
+#include "discountsale.h"
+namespace salesavitch
+{
+	DiscountSale::DiscountSale() : Sale(),discount(0)
+	{
+	}
+	DiscountSale::DiscountSale(double the_price, double the_discount) : Sale(the_price), discount(the_discount)
+	{
+	}
+	double DiscountSale::bill() const
+	{
+		double fraction = discount/100;
+		return (1-fraction)*price;
+	}
+}
+
+// 15.11 Use of a Virtual Function
+#include <iostream>
+#include "sale.h"
+#include "discountsale.h"
+
+using namespace std;
+using namespace salesavitch;
+
+int main()
+{
+	Sale simple(10.00);
+	DiscountSale discount(11.00, 10);
+	
+	cout.setf(ios::fixed);
+	cout.setf(ios::showpoint);
+	cout.precision(2);
+	if (discount < simple)
+	{
+		cout << "Discounted item is cheaper.\n";
+		cout << "Savings is $" << simple.savings(discount)<<endl;
+	}
+	else
+		cout << "Discounted item is not cheaper.\n";
+	return 0;
+}
+
+// together
+
+#include <iostream>
+namespace salesavitch
+{
+	class Sale
+	{
+	public:
+		Sale();
+		Sale(double the_price);
+		virtual double bill() const;
+		double savings(const Sale& other) const;
+	protected:
+		double price;
+	};
+
+	bool operator<(const Sale& first, const Sale& second);
+}
+namespace salesavitch
+{
+	class DiscountSale : public Sale
+	{
+	public:
+		DiscountSale();
+		DiscountSale(double the_price, double the_discount);
+		//virtual tells compiler to use the version of the function bill that 
+		// corresponds to the object of the derived class
+		// late binding, dynamic binding
+		// add virtual to declaration not definition 
+		virtual double bill() const;
+	protected:
+		double discount;
+	};
+}
+
+
+using namespace std;
+using namespace salesavitch;
+
+
+
+int main()
+{
+	Sale simple(10.00);
+	DiscountSale discount(11.00, 10);
+
+	cout.setf(ios::fixed);
+	cout.setf(ios::showpoint);
+	cout.precision(2);
+	if (discount < simple)
+	{
+		cout << "Discounted item is cheaper.\n";
+		cout << "Savings is $" << simple.savings(discount)<<endl;
+	}
+	else
+		cout << "Discounted item is not cheaper.\n";
+	return 0;
+}
+
+
+
+
+
+
+namespace salesavitch
+{
+	Sale::Sale() : price(0)
+	{
+	}
+	Sale::Sale(double the_price) : price(the_price)
+	{
+	}
+	double Sale::bill() const
+	{
+		return price;
+	}
+	double Sale::savings(const Sale& other) const
+	{
+		return (bill() - other.bill());
+	}
+	bool operator<(const Sale& first, const Sale& second)
+	{
+		return(first.bill()<second.bill());
+	}
+}
+
+namespace salesavitch
+{
+	DiscountSale::DiscountSale() : Sale(),discount(0)
+	{
+	}
+	DiscountSale::DiscountSale(double the_price, double the_discount) : Sale(the_price), discount(the_discount)
+	{
+	}
+	double DiscountSale::bill() const
+	{
+		double fraction = discount/100;
+		return (1-fraction)*price;
+	}
+}
+
+
+/* overriding vs redefining
+when a virtual function is changed in the derived class=> overriding
+if a funciton is not virtual, it's called redefining*/
+
+// it's allowed, but cause a slicing problem
+//derived object=> base object
+Dog vdog;
+Pet vpet;
+vdog.name = "Tiny";
+vdog.breed = "Great Dane";
+vpet = vdog;
+vpet.breed; // Illegal
+
+// solve this problem by using pointer
+Pet *ppet;
+Dog *pdog;
+pdog = new Dog;
+pdog->name = "Tiny";
+pdog->breed = "Great Dane";
+ppet = pdog;
+
+// 15.12 More inheritance with Virtual Functions
+#include <string>
+#include <iostream>
+
+using namespace std;
+class Pet
+{
+	public:
+		virtual void print();
+		string name;
+};
+
+class Dog : public Pet
+{
+	public:
+		virtual void print();
+		string breed;
+};
+
+int main()
+{
+	
+	Dog vdog;
+	Pet vpet;
+	vdog.name = "Tiny";
+	vdog.breed = "Great Dane";
+	vpet = vdog;
+	vpet.breed; // Illegal	
+	
+	Pet *ppet;
+	Dog *pdog;
+	pdog = new Dog;
+	pdog->name = "Tiny";
+	pdog->breed = "Great Dane";
+	ppet = pdog;
+	ppet->print();
+	pdog->print();
+	return 0;
+}
+
+void Dog::print()
+{
+	cout << "Name: " << name << endl;
+	cout << "Breed: " << breed << endl;
+}
+
+void Pet::print()
+{
+	cout << "Name: " << endl;
+}
+
+// make destructors virtual
+Base *pBase = new Derived;
+delet pBase;
+// it will only invoke the base destructors, leave some memory unfreed 
